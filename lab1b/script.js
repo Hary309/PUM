@@ -4,6 +4,8 @@ const COLOR_GREEN = "#00FF00";
 const COLOR_BLUE = "#0000FF";
 
 let animation = 0;
+let colorAnimation = 0;
+let colorAnimationVelocity = 1;
 
 let currentSolidColor = COLOR_BLUE;
 let currentColorIndex = 1;
@@ -18,7 +20,14 @@ function draw() {
 
     requestAnimationFrame(draw);
 
-    animation += 0.05;
+    animation += 1;
+    colorAnimation += colorAnimationVelocity;
+
+    if (colorAnimation > 60) {
+        colorAnimationVelocity = -1;
+    } else if (colorAnimation < 0) {
+        colorAnimationVelocity = 1;
+    }
 
     ctx.clearRect(0,0, WIDTH, HEIGHT);
     drawCircle(64, CIRCLE_Y, currentSolidColor);
@@ -42,7 +51,7 @@ function drawCircle(x, y, color) {
 }
 
 function getPosYAnimation() {
-    let anim = Math.pow(Math.sin(animation), 2);
+    let anim = Math.pow(Math.sin(animation / 10), 2);
 
     return HEIGHT / 2 - 100 * anim;
 }
@@ -58,10 +67,10 @@ function getSolidColor() {
 }
 
 function getGradientColor() {
-    let progress = Math.pow(Math.sin(animation), 2);
+    let progress = (colorAnimation) * ( 255 / 60);
     let r = 0;
-    let g = Math.floor(255 * (progress));
-    let b = Math.floor(255 * (1 - progress));
+    let g = progress;
+    let b = 255 - progress;
 
     return `rgb(${r},${g},${b})`;
 }
