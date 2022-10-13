@@ -5,8 +5,8 @@ const COLOR_BLUE = "#0000FF";
 
 let animation = 0;
 
-let currentSolidColor = COLOR_GREEN;
-let currentColorIndex = 0;
+let currentSolidColor = COLOR_BLUE;
+let currentColorIndex = 1;
 
 let cavnas = document.getElementById("canvas");
 canvas.width = WIDTH;
@@ -60,8 +60,8 @@ function getSolidColor() {
 function getGradientColor() {
     let progress = Math.pow(Math.sin(animation), 2);
     let r = 0;
-    let g = Math.floor(255 * (1 - progress));
-    let b = Math.floor(255 * progress);
+    let g = Math.floor(255 * (progress));
+    let b = Math.floor(255 * (1 - progress));
 
     return `rgb(${r},${g},${b})`;
 }
