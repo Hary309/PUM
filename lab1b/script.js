@@ -3,6 +3,8 @@ const HEIGHT = 600;
 const COLOR_GREEN = "#00FF00";
 const COLOR_BLUE = "#0000FF";
 
+let animation = 0;
+
 let currentSolidColor = COLOR_GREEN;
 let currentColorIndex = 0;
 
@@ -14,8 +16,10 @@ let CIRCLE_Y = HEIGHT / 2;
 
 function draw() {
     requestAnimationFrame(draw);
+    animation += 0.05;
 
     drawCircle(64, CIRCLE_Y, currentSolidColor);
+    drawCircle(256, CIRCLE_Y, getGradientColor());
 }
 
 requestAnimationFrame(draw);
@@ -43,3 +47,11 @@ function getSolidColor() {
     }
 }
 
+function getGradientColor() {
+    let progress = Math.pow(Math.sin(animation), 2);
+    let r = 0;
+    let g = Math.floor(255 * (1 - progress));
+    let b = Math.floor(255 * progress);
+
+    return `rgb(${r},${g},${b})`;
+}
