@@ -44,6 +44,7 @@ class Circle {
 
     update() {
         this.x -= 1;
+        this.y += this.velocityY;
 
         let currentStairX = parseInt((this.x - STAIRCASE_OFFSET) / RECT_WIDTH, 10);
 
@@ -57,7 +58,9 @@ class Circle {
             console.log(realCircleY, realStairY);
 
             if (realCircleY > realStairY) {
-                this.y += 2;
+                this.velocityY += 0.1;
+            } else {
+                this.velocityY = 0;
             }
         }
 
