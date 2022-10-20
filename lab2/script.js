@@ -39,36 +39,28 @@ class Circle {
         this.y = y;
         this.radius = radius;
         this.color = color;
-
-        this.vecoityY = 0;
-        this.lastStairX = 5;
-        this.lastStairY = 5;
+        this.velocityY = 0;
     }
 
     update() {
         this.x -= 1;
-        this.y += this.vecoityY;
 
         let currentStairX = parseInt((this.x - STAIRCASE_OFFSET) / RECT_WIDTH, 10);
-        let currentStairY = parseInt((400 - (this.y - FLOOR_HEIGHT - RECT_SEGMENT_HEIGHT * 4)) / RECT_SEGMENT_HEIGHT);
 
-        if (this.lastStairX != currentStairX) {
-            this.lastStairX = currentStairX;
-            this.beginFall();
+
+        if (currentStairX >= 0) {
+            let currentStair = objects[currentStairX];
+
+            let realCircleY = HEIGHT - FLOOR_HEIGHT - this.y;
+            let realStairY = HEIGHT - currentStair.y;
+
+            console.log(realCircleY, realStairY);
+
+            if (realCircleY > realStairY) {
+                this.y += 2;
+            }
         }
 
-        if (this.lastStairY != currentStairY) {
-            this.lastStairY = currentStairY;
-            this.endFall();
-        }
-    }
-
-    beginFall() {
-        this.vecoityY = 4;
-    }
-
-    endFall() {
-        this.vecoityY = 0;
     }
 
     draw() {
