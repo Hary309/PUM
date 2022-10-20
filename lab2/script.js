@@ -42,33 +42,33 @@ class Circle {
 
         this.vecoityY = 0;
         this.lastStairX = 5;
+        this.lastStairY = 5;
     }
 
     update() {
-        // this.x -= 1;
-        this.y += 0.1;
-        // this.vecoityY;
+        this.x -= 1;
+        this.y += this.vecoityY;
 
         let currentStairX = parseInt((this.x - STAIRCASE_OFFSET) / RECT_WIDTH, 10);
-
-        // console.log(this.y - FLOOR_HEIGHT - RECT_SEGMENT_HEIGHT * 5);
-
-        let currentStairY = 5 - parseInt((this.y - FLOOR_HEIGHT - RECT_SEGMENT_HEIGHT * 5) / RECT_SEGMENT_HEIGHT, 10);
-
-        console.log(currentStairY);
+        let currentStairY = parseInt((400 - (this.y - FLOOR_HEIGHT - RECT_SEGMENT_HEIGHT * 4)) / RECT_SEGMENT_HEIGHT);
 
         if (this.lastStairX != currentStairX) {
             this.lastStairX = currentStairX;
             this.beginFall();
         }
 
+        if (this.lastStairY != currentStairY) {
+            this.lastStairY = currentStairY;
+            this.endFall();
+        }
     }
 
     beginFall() {
-        this.vecoityY = 1;
+        this.vecoityY = 4;
     }
 
     endFall() {
+        this.vecoityY = 0;
     }
 
     draw() {
