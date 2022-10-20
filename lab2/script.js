@@ -55,8 +55,6 @@ class Circle {
             let realCircleY = HEIGHT - FLOOR_HEIGHT - this.y;
             let realStairY = HEIGHT - currentStair.y;
 
-            console.log(realCircleY, realStairY);
-
             if (realCircleY > realStairY) {
                 this.velocityY += 0.1;
             } else {
