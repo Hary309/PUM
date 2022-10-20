@@ -5,6 +5,7 @@ const RECT_WIDTH = 40;
 const RECT_SEGMENT_HEIGHT = 40;
 const FLOOR_HEIGHT = 20;
 const CIRCLE_RADIUS = 20;
+const STAIRCASE_OFFSET = 300;
 
 let cavnas = document.getElementById("canvas");
 canvas.width = WIDTH;
@@ -38,10 +39,36 @@ class Circle {
         this.y = y;
         this.radius = radius;
         this.color = color;
+
+        this.vecoityY = 0;
+        this.lastStairX = 5;
     }
 
     update() {
+        // this.x -= 1;
+        this.y += 0.1;
+        // this.vecoityY;
 
+        let currentStairX = parseInt((this.x - STAIRCASE_OFFSET) / RECT_WIDTH, 10);
+
+        // console.log(this.y - FLOOR_HEIGHT - RECT_SEGMENT_HEIGHT * 5);
+
+        let currentStairY = 5 - parseInt((this.y - FLOOR_HEIGHT - RECT_SEGMENT_HEIGHT * 5) / RECT_SEGMENT_HEIGHT, 10);
+
+        console.log(currentStairY);
+
+        if (this.lastStairX != currentStairX) {
+            this.lastStairX = currentStairX;
+            this.beginFall();
+        }
+
+    }
+
+    beginFall() {
+        this.vecoityY = 1;
+    }
+
+    endFall() {
     }
 
     draw() {
@@ -62,11 +89,9 @@ setInterval(function() {
         return;
     }
 
-    const offset = 300;
-
     const height = FLOOR_HEIGHT + RECT_SEGMENT_HEIGHT * objects.length;
 
-    const x = offset + objects.length * RECT_WIDTH;
+    const x = STAIRCASE_OFFSET + objects.length * RECT_WIDTH;
     const y = HEIGHT - height;
     const width = RECT_WIDTH;
 
@@ -75,7 +100,7 @@ setInterval(function() {
     if (objects.length == 6) {
         objects.push(new Circle(x + RECT_WIDTH / 2, y - CIRCLE_RADIUS, CIRCLE_RADIUS, "#FF0000"));
     }
-}, 1000);
+}, 10);
 
 function draw() {
     requestAnimationFrame(draw);
