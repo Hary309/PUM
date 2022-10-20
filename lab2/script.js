@@ -95,7 +95,7 @@ setInterval(function() {
     if (objects.length == 6) {
         objects.push(new Circle(x + RECT_WIDTH / 2, y - CIRCLE_RADIUS, CIRCLE_RADIUS, "#FF0000"));
     }
-}, 10);
+}, 1000);
 
 function draw() {
     requestAnimationFrame(draw);
