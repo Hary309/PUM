@@ -9,6 +9,8 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 var ctx = canvas.getContext("2d");
 
+let score = 0;
+
 class Player {
     constructor(x, y, width, height) {
         this.x = x;
@@ -113,12 +115,19 @@ function updateFrame() {
         ball.draw();
     }
 
+    // render text with score
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    ctx.fillText("Score: " + score, 10, 50);
+
     bullets = bullets.filter(bullet => bullet.y > 0);
 
     for (let bullet of bullets) {
         for (let ball of balls) {
             if (bullet.x > ball.x - ball.radius && bullet.x < ball.x + ball.radius && bullet.y > ball.y - ball.radius && bullet.y < ball.y + ball.radius) {
                 balls.splice(balls.indexOf(ball), 1);
+
+                score ++;
             }
         }
     }
