@@ -86,21 +86,31 @@ class Ball {
 
 var player = new Player(WIDTH / 2 - PLAYER_WIDTH / 2, HEIGHT - PLAYER_HEIGHT - 32, PLAYER_WIDTH, PLAYER_HEIGHT);
 var bullets = [];
+var balls = [];
 
 function init() {
 }
 
-function draw() {
-    requestAnimationFrame(draw);
+setInterval(function() {
+    balls.push(new Ball(Math.random() * WIDTH, 64, Math.random() * 20 + 20, 'blue'));
+}, 1000);
+
+
+function updateFrame() {
+    requestAnimationFrame(updateFrame);
 
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
     player.update();
     player.draw();
 
-    for (let object of bullets) {
-        object.update();
-        object.draw();
+    for (let bullet of bullets) {
+        bullet.update();
+        bullet.draw();
+    }
+
+    for (let ball of balls) {
+        ball.draw();
     }
 
     bullets = bullets.filter(bullet => bullet.y > 0);
@@ -125,6 +135,6 @@ function keyUpInput(e) {
 }
 
 init();
-requestAnimationFrame(draw);
+requestAnimationFrame(updateFrame);
 window.addEventListener('keydown',keyDownInput,false);
 window.addEventListener('keyup',keyUpInput,false);
