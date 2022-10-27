@@ -1,7 +1,7 @@
 const WIDTH = 800;
 const HEIGHT = 600;
 
-const PLAYER_WIDTH = 128;
+const PLAYER_WIDTH = 64;
 const PLAYER_HEIGHT = 32;
 
 let cavnas = document.getElementById("canvas");
@@ -114,6 +114,14 @@ function updateFrame() {
     }
 
     bullets = bullets.filter(bullet => bullet.y > 0);
+
+    for (let bullet of bullets) {
+        for (let ball of balls) {
+            if (bullet.x > ball.x - ball.radius && bullet.x < ball.x + ball.radius && bullet.y > ball.y - ball.radius && bullet.y < ball.y + ball.radius) {
+                balls.splice(balls.indexOf(ball), 1);
+            }
+        }
+    }
 }
 
 function keyDownInput(e) {
