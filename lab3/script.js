@@ -1,6 +1,9 @@
 const WIDTH = 800;
 const HEIGHT = 600;
 
+const PLAYER_WIDTH = 128;
+const PLAYER_HEIGHT = 32;
+
 let cavnas = document.getElementById("canvas");
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
@@ -56,6 +59,7 @@ class Ball {
     }
 }
 
+var player = new Player(WIDTH / 2 - PLAYER_WIDTH / 2, HEIGHT - PLAYER_HEIGHT - 32, PLAYER_WIDTH, PLAYER_HEIGHT);
 var objects = [];
 
 function init() {
@@ -65,6 +69,8 @@ function draw() {
     requestAnimationFrame(draw);
 
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    player.draw();
 
     for (let object of objects) {
         object.update();
