@@ -29,6 +29,7 @@ class Player {
     }
 
     draw() {
+        ctx.fillStyle = "black";
         ctx.beginPath();
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fill();
@@ -56,6 +57,7 @@ class Bullet {
     }
 
     update() {
+        this.y -= 10;
     }
 
     draw() {
@@ -83,7 +85,7 @@ class Ball {
 }
 
 var player = new Player(WIDTH / 2 - PLAYER_WIDTH / 2, HEIGHT - PLAYER_HEIGHT - 32, PLAYER_WIDTH, PLAYER_HEIGHT);
-var objects = [];
+var bullets = [];
 
 function init() {
 }
@@ -96,10 +98,12 @@ function draw() {
     player.update();
     player.draw();
 
-    for (let object of objects) {
+    for (let object of bullets) {
         object.update();
         object.draw();
     }
+
+    bullets = bullets.filter(bullet => bullet.y > 0);
 }
 
 function keyDownInput(e) {
@@ -107,6 +111,8 @@ function keyDownInput(e) {
         player.moveLeft();
     } else if (e.key == 'd') {
         player.moveRight();
+    } else if (e.key == ' ') {
+        bullets.push(new Bullet(player.x + player.width / 2, player.y, 5, 'red'));
     }
 }
 
