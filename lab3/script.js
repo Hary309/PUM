@@ -15,12 +15,35 @@ class Player {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.velocityX = 0;
+    }
+
+    update() {
+        this.x += this.velocityX;
+
+        if (this.x < 0) {
+            this.x = 0;
+        } else if (this.x + this.width > WIDTH) {
+            this.x = WIDTH - this.width;
+        }
     }
 
     draw() {
         ctx.beginPath();
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fill();
+    }
+
+    moveLeft() {
+        this.velocityX = -10;
+    }
+
+    moveRight() {
+        this.velocityX = 10;
+    }
+
+    stopMove() {
+        this.velocityX = 0;
     }
 }
 
@@ -70,6 +93,7 @@ function draw() {
 
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
+    player.update();
     player.draw();
 
     for (let object of objects) {
@@ -78,14 +102,23 @@ function draw() {
     }
 }
 
-function input(e) {
+function keyDownInput(e) {
     if (e.key == 'a') {
-        console.log("Left");
+        player.moveLeft();
     } else if (e.key == 'd') {
-        console.log("Right");
+        player.moveRight();
+    }
+}
+
+function keyUpInput(e) {
+    if (e.key == 'a') {
+        player.stopMove();
+    } else if (e.key == 'd') {
+        player.stopMove();
     }
 }
 
 init();
 requestAnimationFrame(draw);
-window.addEventListener('keydown',input,false);
+window.addEventListener('keydown',keyDownInput,false);
+window.addEventListener('keyup',keyUpInput,false);
