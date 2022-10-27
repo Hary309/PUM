@@ -78,5 +78,14 @@ function draw() {
     }
 }
 
+function input(e) {
+    if (e.key == 'a') {
+        console.log("Left");
+    } else if (e.key == 'd') {
+        console.log("Right");
+    }
+}
+
 init();
 requestAnimationFrame(draw);
+window.addEventListener('keydown',input,false);
