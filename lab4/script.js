@@ -2,6 +2,8 @@ const WIDTH = 800;
 const HEIGHT = 600;
 
 const ROAD_WIDTH = 400;
+const LINE_WIDTH = 10;
+const LINE_HEIGHT = 30;
 
 let cavnas = document.getElementById("canvas");
 canvas.width = WIDTH;
@@ -9,6 +11,7 @@ canvas.height = HEIGHT;
 var ctx = canvas.getContext("2d");
 
 let carSpeed = 10;
+let carPosition = 0;
 
 function drawBackground() {
     ctx.fillStyle = "green";
@@ -19,13 +22,22 @@ function drawBackground() {
 
     ctx.fillStyle = "white";
 
-    ctx.fillRect(WIDTH / 2 - ROAD_WIDTH / 2 + 10, 0, 10, HEIGHT);
-    ctx.fillRect(WIDTH / 2 + ROAD_WIDTH / 2 - 20, 0, 10, HEIGHT);
+    let segmentOffset = WIDTH / 2 - ROAD_WIDTH / 2;
+    let segmentWidth = ROAD_WIDTH / 6;
+
+    ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH, carPosition, LINE_WIDTH, LINE_HEIGHT);
+    ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH, carPosition, LINE_WIDTH, LINE_HEIGHT);
 }
 
 function updateFrame() {
     requestAnimationFrame(updateFrame);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    carPosition += carSpeed;
+
+    if (carPosition > HEIGHT) {
+        carPosition = 0;
+    }
 
     drawBackground();
 }
