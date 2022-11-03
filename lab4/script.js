@@ -76,25 +76,25 @@ function updateFrame() {
 }
 
 function keyDownInput(e) {
-    if (e.key == 'a') {
+    if (e.key == 'ArrowLeft') {
         playerVelocityX = -10;
-    } else if (e.key == 'd') {
+    } else if (e.key == 'ArrowRight') {
         playerVelocityX = 10;
-    } else if (e.key == 'w') {
+    } else if (e.key == 'ArrowUp') {
         playerVelocityY = -10;
-    } else if (e.key == 's') {
+    } else if (e.key == 'ArrowDown') {
         playerVelocityY = 10;
     }
 }
 
 function keyUpInput(e) {
-    if (e.key == 'a') {
+    if (e.key == 'ArrowLeft') {
         playerVelocityX = 0;
-    } else if (e.key == 'd') {
+    } else if (e.key == 'ArrowRight') {
         playerVelocityX =0;
-    } else if (e.key == 'w') {
+    } else if (e.key == 'ArrowUp') {
         playerVelocityY =0;
-    } else if (e.key == 's') {
+    } else if (e.key == 'ArrowDown') {
         playerVelocityY = 0;
     }
 }
