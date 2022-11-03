@@ -15,21 +15,37 @@ let carSpeed = 10;
 let carPosition = 0;
 
 function drawBackground() {
+    // draw grass
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
+    // draw road
     ctx.fillStyle = "grey";
     ctx.fillRect(WIDTH / 2 - ROAD_WIDTH / 2, 0, ROAD_WIDTH, HEIGHT);
 
+    // draw center lines
     ctx.fillStyle = "white";
-
     let segmentOffset = WIDTH / 2 - ROAD_WIDTH / 2;
     let segmentWidth = ROAD_WIDTH / 6;
 
     for (let i = 0; i < 6; i++) {
         let y = (carPosition + i * LINE_OFFSET) % HEIGHT;
-        ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH, y, LINE_WIDTH, LINE_HEIGHT);
-        ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH, y, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH / 2, y, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH / 2, y, LINE_WIDTH, LINE_HEIGHT);
+    }
+
+    // draw border lines
+    ctx.fillStyle = "red";
+    let leftLine = WIDTH / 2 - ROAD_WIDTH / 2 - LINE_WIDTH;
+    let rightLine = WIDTH / 2 + ROAD_WIDTH / 2;
+    ctx.fillRect(leftLine, 0, LINE_WIDTH, HEIGHT);
+    ctx.fillRect(rightLine, 0, LINE_WIDTH, HEIGHT);
+
+    ctx.fillStyle = "white";
+    for (let i = 0; i < HEIGHT / LINE_HEIGHT; i++) {
+        let y = (carPosition + i * LINE_HEIGHT * 2) % HEIGHT;
+        ctx.fillRect(leftLine, y, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(rightLine, y, LINE_WIDTH, LINE_HEIGHT);
     }
 }
 
