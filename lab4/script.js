@@ -26,6 +26,8 @@ let obstacles = [];
 
 let isGameOver = false;
 
+let score = 0;
+
 class Obstacle {
     constructor(x, y, width, height) {
         this.x = x;
@@ -101,6 +103,16 @@ function updateFrame() {
     drawBackground();
     drawCar();
 
+    // draw score
+    ctx.fillStyle = "white";
+    ctx.font = "30px Arial";
+    ctx.fillText("Score: " + score, 10, 30);
+
+    // draw speed
+    ctx.fillStyle = "white";
+    ctx.font = "30px Arial";
+    ctx.fillText("Speed: " +  carSpeed.toFixed(2), 10, 60);
+
     if (isGameOver) {
         ctx.fillStyle = "white";
         ctx.font = "24px Arial";
@@ -133,6 +145,10 @@ setInterval(function() {
     let min = WIDTH / 2 - ROAD_WIDTH / 2 + CAR_WIDTH;
     let max = WIDTH / 2 + ROAD_WIDTH / 2 - CAR_WIDTH;
     obstacles.push(new Obstacle(min + Math.random() * (max - min), -100, CAR_WIDTH, CAR_HEIGHT));
+
+    if (!isGameOver) {
+        score += 1;
+    }
 }, 1000);
 
 function keyDownInput(e) {
