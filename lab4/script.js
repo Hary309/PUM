@@ -40,6 +40,13 @@ class Obstacle {
     update() {
         this.y += carSpeed;
     }
+
+    isColliding() {
+        return playerX - CAR_WIDTH / 2 < this.x + this.width &&
+            playerX + CAR_WIDTH / 2 > this.x &&
+            playerY < this.y + this.height &&
+            playerY + CAR_HEIGHT > this.y;
+    }
 }
 
 function drawBackground() {
@@ -98,6 +105,11 @@ function updateFrame() {
     for (let obstancle of obstacles) {
         obstancle.draw();
         obstancle.update();
+
+        if (obstancle.isColliding()) {
+            alert("Game over");
+            location.reload();
+        }
     }
 }
 
