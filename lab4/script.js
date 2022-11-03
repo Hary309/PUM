@@ -22,6 +22,26 @@ let playerY = HEIGHT - CAR_HEIGHT - 20;
 let playerVelocityX = 0;
 let playerVelocityY = 0;
 
+let obstacles = [];
+
+class Obstacle {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    draw() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    update() {
+        this.y += carSpeed;
+    }
+}
+
 function drawBackground() {
     // draw grass
     ctx.fillStyle = "green";
@@ -60,6 +80,7 @@ function drawBackground() {
 function drawCar() {
     ctx.fillStyle = "red";
     ctx.fillRect(playerX - CAR_WIDTH / 2, playerY, CAR_WIDTH, CAR_HEIGHT);
+
 }
 
 function updateFrame() {
@@ -73,7 +94,18 @@ function updateFrame() {
 
     drawBackground();
     drawCar();
+
+    for (let obstancle of obstacles) {
+        obstancle.draw();
+        obstancle.update();
+    }
 }
+
+setInterval(function() {
+    let min = WIDTH / 2 - ROAD_WIDTH / 2 + CAR_WIDTH;
+    let max = WIDTH / 2 + ROAD_WIDTH / 2 - CAR_WIDTH;
+    obstacles.push(new Obstacle(min + Math.random() * (max - min), -100, CAR_WIDTH, CAR_HEIGHT));
+}, 1000);
 
 function keyDownInput(e) {
     if (e.key == 'ArrowLeft') {
