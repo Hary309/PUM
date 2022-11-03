@@ -4,6 +4,7 @@ const HEIGHT = 600;
 const ROAD_WIDTH = 400;
 const LINE_WIDTH = 10;
 const LINE_HEIGHT = 30;
+const LINE_OFFSET = 100;
 
 let cavnas = document.getElementById("canvas");
 canvas.width = WIDTH;
@@ -25,8 +26,11 @@ function drawBackground() {
     let segmentOffset = WIDTH / 2 - ROAD_WIDTH / 2;
     let segmentWidth = ROAD_WIDTH / 6;
 
-    ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH, carPosition, LINE_WIDTH, LINE_HEIGHT);
-    ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH, carPosition, LINE_WIDTH, LINE_HEIGHT);
+    for (let i = 0; i < 6; i++) {
+        let y = (carPosition + i * LINE_OFFSET) % HEIGHT;
+        ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH, y, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH, y, LINE_WIDTH, LINE_HEIGHT);
+    }
 }
 
 function updateFrame() {
@@ -35,9 +39,9 @@ function updateFrame() {
 
     carPosition += carSpeed;
 
-    if (carPosition > HEIGHT) {
-        carPosition = 0;
-    }
+    // if (carPosition > HEIGHT) {
+    //     carPosition = 0;
+    // }
 
     drawBackground();
 }
