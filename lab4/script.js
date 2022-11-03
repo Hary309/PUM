@@ -52,6 +52,8 @@ class Obstacle {
 }
 
 function drawBackground() {
+    let roadTime = time * 2;
+
     // draw grass
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -66,7 +68,7 @@ function drawBackground() {
     let segmentWidth = ROAD_WIDTH / 6;
 
     for (let i = 0; i < 6; i++) {
-        let y = (time + i * LINE_OFFSET) % HEIGHT;
+        let y = (roadTime + i * LINE_OFFSET) % HEIGHT;
         ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH / 2, y - LINE_OFFSET / 4, LINE_WIDTH, LINE_HEIGHT);
         ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH / 2, y - LINE_OFFSET / 4, LINE_WIDTH, LINE_HEIGHT);
     }
@@ -80,7 +82,7 @@ function drawBackground() {
 
     ctx.fillStyle = "white";
     for (let i = 0; i < HEIGHT / LINE_HEIGHT; i++) {
-        let y = (time + i * LINE_HEIGHT * 2) % HEIGHT;
+        let y = (roadTime + i * LINE_HEIGHT * 2) % HEIGHT;
         ctx.fillRect(leftLine, y - LINE_HEIGHT / 2, LINE_WIDTH, LINE_HEIGHT);
         ctx.fillRect(rightLine, y - LINE_HEIGHT / 2, LINE_WIDTH, LINE_HEIGHT);
     }
