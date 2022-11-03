@@ -13,7 +13,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 var ctx = canvas.getContext("2d");
 
-let carSpeed = 10;
+let carSpeed = 4;
 
 let time = 0;
 
@@ -23,6 +23,8 @@ let playerVelocityX = 0;
 let playerVelocityY = 0;
 
 let obstacles = [];
+
+let isGameOver = false;
 
 class Obstacle {
     constructor(x, y, width, height) {
@@ -65,8 +67,8 @@ function drawBackground() {
 
     for (let i = 0; i < 6; i++) {
         let y = (time + i * LINE_OFFSET) % HEIGHT;
-        ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH / 2, y, LINE_WIDTH, LINE_HEIGHT);
-        ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH / 2, y, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH / 2, y - LINE_OFFSET / 4, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH / 2, y - LINE_OFFSET / 4, LINE_WIDTH, LINE_HEIGHT);
     }
 
     // draw border lines
@@ -79,38 +81,50 @@ function drawBackground() {
     ctx.fillStyle = "white";
     for (let i = 0; i < HEIGHT / LINE_HEIGHT; i++) {
         let y = (time + i * LINE_HEIGHT * 2) % HEIGHT;
-        ctx.fillRect(leftLine, y, LINE_WIDTH, LINE_HEIGHT);
-        ctx.fillRect(rightLine, y, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(leftLine, y - LINE_HEIGHT / 2, LINE_WIDTH, LINE_HEIGHT);
+        ctx.fillRect(rightLine, y - LINE_HEIGHT / 2, LINE_WIDTH, LINE_HEIGHT);
     }
 }
 
 function drawCar() {
     ctx.fillStyle = "red";
     ctx.fillRect(playerX - CAR_WIDTH / 2, playerY, CAR_WIDTH, CAR_HEIGHT);
-
 }
 
 function updateFrame() {
     requestAnimationFrame(updateFrame);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
+
+    drawBackground();
+    drawCar();
+
+    if (isGameOver) {
+        ctx.fillStyle = "white";
+        ctx.font = "24px Arial";
+        ctx.fillText("Game Over. Press F5 to restart", WIDTH / 2 - 150, HEIGHT / 2);
+        return;
+    }
+
+    carSpeed += 0.001;
+
     time += carSpeed;
 
     playerX += playerVelocityX;
     playerY += playerVelocityY;
-
-    drawBackground();
-    drawCar();
 
     for (let obstancle of obstacles) {
         obstancle.draw();
         obstancle.update();
 
         if (obstancle.isColliding()) {
-            alert("Game over");
-            location.reload();
+            isGameOver = true;
+            carSpeed = 0;
+            break;
         }
     }
+
+    obstacles = obstacles.filter(obstacle => obstacle.y < HEIGHT);
 }
 
 setInterval(function() {
@@ -121,13 +135,13 @@ setInterval(function() {
 
 function keyDownInput(e) {
     if (e.key == 'ArrowLeft') {
-        playerVelocityX = -10;
+        playerVelocityX = -4;
     } else if (e.key == 'ArrowRight') {
-        playerVelocityX = 10;
+        playerVelocityX = 4;
     } else if (e.key == 'ArrowUp') {
-        playerVelocityY = -10;
+        playerVelocityY = -4;
     } else if (e.key == 'ArrowDown') {
-        playerVelocityY = 10;
+        playerVelocityY = 4;
     }
 }
 
