@@ -5,6 +5,8 @@ const ROAD_WIDTH = 400;
 const LINE_WIDTH = 10;
 const LINE_HEIGHT = 30;
 const LINE_OFFSET = 100;
+const CAR_WIDTH = 60;
+const CAR_HEIGHT = 100;
 
 let cavnas = document.getElementById("canvas");
 canvas.width = WIDTH;
@@ -12,7 +14,13 @@ canvas.height = HEIGHT;
 var ctx = canvas.getContext("2d");
 
 let carSpeed = 10;
-let carPosition = 0;
+
+let time = 0;
+
+let playerX = WIDTH / 2;
+let playerY = HEIGHT - CAR_HEIGHT - 20;
+let playerVelocityX = 0;
+let playerVelocityY = 0;
 
 function drawBackground() {
     // draw grass
@@ -29,7 +37,7 @@ function drawBackground() {
     let segmentWidth = ROAD_WIDTH / 6;
 
     for (let i = 0; i < 6; i++) {
-        let y = (carPosition + i * LINE_OFFSET) % HEIGHT;
+        let y = (time + i * LINE_OFFSET) % HEIGHT;
         ctx.fillRect(segmentOffset + segmentWidth * 2 - LINE_WIDTH / 2, y, LINE_WIDTH, LINE_HEIGHT);
         ctx.fillRect(segmentOffset + segmentWidth * 4 + LINE_WIDTH / 2, y, LINE_WIDTH, LINE_HEIGHT);
     }
@@ -43,29 +51,52 @@ function drawBackground() {
 
     ctx.fillStyle = "white";
     for (let i = 0; i < HEIGHT / LINE_HEIGHT; i++) {
-        let y = (carPosition + i * LINE_HEIGHT * 2) % HEIGHT;
+        let y = (time + i * LINE_HEIGHT * 2) % HEIGHT;
         ctx.fillRect(leftLine, y, LINE_WIDTH, LINE_HEIGHT);
         ctx.fillRect(rightLine, y, LINE_WIDTH, LINE_HEIGHT);
     }
+}
+
+function drawCar() {
+    ctx.fillStyle = "red";
+    ctx.fillRect(playerX - CAR_WIDTH / 2, playerY, CAR_WIDTH, CAR_HEIGHT);
 }
 
 function updateFrame() {
     requestAnimationFrame(updateFrame);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    carPosition += carSpeed;
+    time += carSpeed;
 
-    // if (carPosition > HEIGHT) {
-    //     carPosition = 0;
-    // }
+    playerX += playerVelocityX;
+    playerY += playerVelocityY;
 
     drawBackground();
+    drawCar();
 }
 
 function keyDownInput(e) {
+    if (e.key == 'a') {
+        playerVelocityX = -10;
+    } else if (e.key == 'd') {
+        playerVelocityX = 10;
+    } else if (e.key == 'w') {
+        playerVelocityY = -10;
+    } else if (e.key == 's') {
+        playerVelocityY = 10;
+    }
 }
 
 function keyUpInput(e) {
+    if (e.key == 'a') {
+        playerVelocityX = 0;
+    } else if (e.key == 'd') {
+        playerVelocityX =0;
+    } else if (e.key == 'w') {
+        playerVelocityY =0;
+    } else if (e.key == 's') {
+        playerVelocityY = 0;
+    }
 }
 
 requestAnimationFrame(updateFrame);
