@@ -24,6 +24,7 @@ let playerVelocityY = 0;
 
 let obstacles = [];
 let bullets = [];
+let bonuses = [];
 
 let isGameOver = false;
 
@@ -46,7 +47,32 @@ class Obstacle {
         this.y += carSpeed;
     }
 
-    isColliding() {
+    isCollidingWithPlayer() {
+        return playerX - CAR_WIDTH / 2 < this.x + this.width &&
+            playerX + CAR_WIDTH / 2 > this.x &&
+            playerY < this.y + this.height &&
+            playerY + CAR_HEIGHT > this.y;
+    }
+}
+
+class Bonus {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    draw() {
+        ctx.fillStyle = "gold";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    update() {
+        this.y += carSpeed * 2;
+    }
+
+    isCollidingWithPlayer() {
         return playerX - CAR_WIDTH / 2 < this.x + this.width &&
             playerX + CAR_WIDTH / 2 > this.x &&
             playerY < this.y + this.height &&
@@ -152,14 +178,27 @@ function updateFrame() {
         bullet.draw();
     }
 
+    for (let bonus of bonuses) {
+        bonus.update();
+        bonus.draw();
+    }
+
+    bonuses = bonuses.filter(bonus => bonus.y < HEIGHT);
     bullets = bullets.filter(bullet => bullet.y > 0);
+
+    for (let bonus of bonuses) {
+        if (bonus.isCollidingWithPlayer()) {
+            score += 10;
+            bonuses = bonuses.filter(b => b !== bonus);
+        }
+    }
 
     for (let i = obstacles.length - 1; i >= 0; i--) {
         let obstacle = obstacles[i];
         obstacle.update();
         obstacle.draw();
 
-        if (obstacle.isColliding()) {
+        if (obstacle.isCollidingWithPlayer()) {
             isGameOver = true;
             carSpeed = 0;
             break;
@@ -186,6 +225,12 @@ setInterval(function () {
     let max = WIDTH / 2 + ROAD_WIDTH / 2 - CAR_WIDTH;
     obstacles.push(new Obstacle(min + Math.random() * (max - min), -100, CAR_WIDTH, CAR_HEIGHT));
 }, 1000);
+
+setInterval(function () {
+    let min = WIDTH / 2 - ROAD_WIDTH / 2 + CAR_WIDTH;
+    let max = WIDTH / 2 + ROAD_WIDTH / 2 - CAR_WIDTH;
+    bonuses.push(new Bonus(min + Math.random() * (max - min), -100, 25, 25));
+}, 1500);
 
 function keyDownInput(e) {
     if (e.key == 'ArrowLeft') {
