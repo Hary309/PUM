@@ -23,6 +23,7 @@ let playerVelocityX = 0;
 let playerVelocityY = 0;
 
 let obstacles = [];
+let bullets = [];
 
 let isGameOver = false;
 
@@ -50,6 +51,26 @@ class Obstacle {
             playerX + CAR_WIDTH / 2 > this.x &&
             playerY < this.y + this.height &&
             playerY + CAR_HEIGHT > this.y;
+    }
+}
+
+class Bullet {
+    constructor(x, y, radius, color) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+    }
+
+    update() {
+        this.y -= 10;
+    }
+
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fill();
     }
 }
 
@@ -111,7 +132,7 @@ function updateFrame() {
     // draw speed
     ctx.fillStyle = "white";
     ctx.font = "30px Arial";
-    ctx.fillText("Speed: " +  carSpeed.toFixed(2), 10, 60);
+    ctx.fillText("Speed: " + carSpeed.toFixed(2), 10, 60);
 
     if (isGameOver) {
         ctx.fillStyle = "white";
@@ -127,6 +148,13 @@ function updateFrame() {
     playerX += playerVelocityX;
     playerY += playerVelocityY;
 
+    for (let bullet of bullets) {
+        bullet.update();
+        bullet.draw();
+    }
+
+    bullets = bullets.filter(bullet => bullet.y > 0);
+
     for (let obstancle of obstacles) {
         obstancle.draw();
         obstancle.update();
@@ -141,14 +169,10 @@ function updateFrame() {
     obstacles = obstacles.filter(obstacle => obstacle.y < HEIGHT);
 }
 
-setInterval(function() {
+setInterval(function () {
     let min = WIDTH / 2 - ROAD_WIDTH / 2 + CAR_WIDTH;
     let max = WIDTH / 2 + ROAD_WIDTH / 2 - CAR_WIDTH;
     obstacles.push(new Obstacle(min + Math.random() * (max - min), -100, CAR_WIDTH, CAR_HEIGHT));
-
-    if (!isGameOver) {
-        score += 1;
-    }
 }, 1000);
 
 function keyDownInput(e) {
@@ -160,6 +184,8 @@ function keyDownInput(e) {
         playerVelocityY = -4;
     } else if (e.key == 'ArrowDown') {
         playerVelocityY = 4;
+    } else if (e.key == ' ') {
+        bullets.push(new Bullet(playerX, playerY, 5, "blue"));
     }
 }
 
@@ -167,14 +193,14 @@ function keyUpInput(e) {
     if (e.key == 'ArrowLeft') {
         playerVelocityX = 0;
     } else if (e.key == 'ArrowRight') {
-        playerVelocityX =0;
+        playerVelocityX = 0;
     } else if (e.key == 'ArrowUp') {
-        playerVelocityY =0;
+        playerVelocityY = 0;
     } else if (e.key == 'ArrowDown') {
         playerVelocityY = 0;
     }
 }
 
 requestAnimationFrame(updateFrame);
-window.addEventListener('keydown',keyDownInput,false);
-window.addEventListener('keyup',keyUpInput,false);
+window.addEventListener('keydown', keyDownInput, false);
+window.addEventListener('keyup', keyUpInput, false);
