@@ -120,7 +120,6 @@ function updateFrame() {
     requestAnimationFrame(updateFrame);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-
     drawBackground();
     drawCar();
 
@@ -155,14 +154,27 @@ function updateFrame() {
 
     bullets = bullets.filter(bullet => bullet.y > 0);
 
-    for (let obstancle of obstacles) {
-        obstancle.draw();
-        obstancle.update();
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+        let obstacle = obstacles[i];
+        obstacle.update();
+        obstacle.draw();
 
-        if (obstancle.isColliding()) {
+        if (obstacle.isColliding()) {
             isGameOver = true;
             carSpeed = 0;
             break;
+        }
+
+        for (let j = bullets.length - 1; j >= 0; j--) {
+            let bullet = bullets[j];
+            if (bullet.x - bullet.radius < obstacle.x + obstacle.width &&
+                bullet.x + bullet.radius > obstacle.x &&
+                bullet.y - bullet.radius < obstacle.y + obstacle.height &&
+                bullet.y + bullet.radius > obstacle.y) {
+                bullets.splice(j, 1);
+                obstacles.splice(i, 1);
+                break;
+            }
         }
     }
 
